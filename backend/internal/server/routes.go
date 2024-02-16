@@ -15,16 +15,14 @@ func (s *Server) RegisterRoutes(logger *log.Logger) http.Handler {
 }
 
 func (s *Server) healthHandler(logger *log.Logger) http.HandlerFunc {
-	return http.HandlerFunc(
-		func(w http.ResponseWriter, r *http.Request) {
-			logRequest(logger, r)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		logRequest(logger, r)
 
-			jsonResp, err := json.Marshal(s.db.Health())
-			if err != nil {
-				logger.Error("error handling JSON marshal. Err: %v", err)
-			}
+		jsonResp, err := json.Marshal(s.db.Health())
+		if err != nil {
+			logger.Error("error handling JSON marshal. Err: %v", err)
+		}
 
-			_, _ = w.Write(jsonResp)
-		},
-	)
+		_, _ = w.Write(jsonResp)
+	})
 }
