@@ -41,7 +41,7 @@ func (s *Server) healthHandler() http.HandlerFunc {
 
 func (s *Server) eventsHandler() http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		logRequest(s.logger, r)
+		s.LogRequest(r)
 
 		// Set CORS headers to allow all origins. You may want to restrict this to specific origins in a production environment.
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -70,7 +70,7 @@ func (s *Server) getChatHandler() http.HandlerFunc {
 
 func (s *Server) getChatStreamHandler() http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		logRequest(s.logger, r)
+		s.LogRequest(r)
 
 		go func() {
 			// Received Browser Disconnection
@@ -109,7 +109,7 @@ type ChatMessage struct {
 
 func (s *Server) postChatHandler() http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		logRequest(s.logger, r)
+		s.LogRequest(r)
 
 		// Set CORS headers to allow all origins. You may want to restrict this to specific origins in a production environment.
 		w.Header().Set("Access-Control-Allow-Origin", "*")
