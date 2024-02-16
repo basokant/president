@@ -37,16 +37,10 @@ func Encode[T any](w io.Writer, event Event[T]) error {
 }
 
 func WriteHeaders(w http.ResponseWriter) {
-	header := w.Header()
-	header.Set("Content-Type", ContentType)
-
-	if _, exist := header["Cache-Control"]; !exist {
-		header.Set("Cache-Control", NoCache)
-	}
-
-	if _, exist := header["Connection"]; !exist {
-		header.Set("Connection", KeepAlive)
-	}
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Connection", "keep-alive")
+	w.Header().Set("Content-Type", "text/event-stream")
 }
 
 func writeId(w io.Writer, id string) {
@@ -73,8 +67,8 @@ func writeRetry(w io.Writer, retry uint) {
 	}
 }
 
-func writeData(w io.Writer, data interface{}) error {
-	w.Write([]byte("data:"))
+func writeData[T any](w io.Writer, data T) error {
+	w.Write([]byte("data: "))
 	switch kindOfData(data) {
 	case reflect.Struct, reflect.Slice, reflect.Map:
 		err := json.NewEncoder(w).Encode(data)
@@ -83,6 +77,8 @@ func writeData(w io.Writer, data interface{}) error {
 		}
 		w.Write([]byte("\n"))
 	default:
+		fmt.Printf("Writing data %s to event\n", fmt.Sprint(data))
+
 		dataReplacer.WriteString(w, fmt.Sprint(data))
 		w.Write([]byte("\n\n"))
 	}

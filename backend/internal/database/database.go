@@ -14,6 +14,8 @@ import (
 
 type Service interface {
 	Health() map[string]string
+	SendMessage(channelName string, message string) error
+	SubscribeToChannel(channelName string) <-chan *redis.Message
 }
 
 type service struct {

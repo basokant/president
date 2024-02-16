@@ -1,0 +1,30 @@
+<html> 
+<head> 
+    <title>Chat Room</title>
+    <link rel="stylesheet" type="text/css" href="http://meyerweb.com/eric/tools/css/reset/reset.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script> 
+        // bind 'myForm' and provide a simple callback function 
+        function send(e, form) {
+          fetch(form.action, {method:'post', body: new FormData(form)});
+          form.reset();
+          e.preventDefault();
+        };
+
+        var source = new EventSource('/chat-stream');
+        source.addEventListener('message', function(e) {
+            $('#messages').append(e.data + "</br>");
+            $('html, body').animate({scrollTop:$(document).height()}, 'slow');
+        }, false);
+    </script> 
+    </head>
+    <body>
+    <h1>Welcome to chat room</h1>
+    <div id="messages"></div>
+    <form id="myForm" method="POST" action="/chat" onsubmit="send(event, this)"> 
+    Message: <input id="message_form" name="message">
+    <input type="submit" value="Submit"> 
+    </form>
+</body>
+</html>
+
