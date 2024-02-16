@@ -91,7 +91,8 @@ func (s *Server) getChatStreamHandler() http.HandlerFunc {
 			if msg != nil && msg.Payload != "" {
 				s.logger.Print("received from chat", "message", msg.Payload)
 				e := sse.Event[string]{
-					Data: msg.Payload,
+					Data:  msg.Payload,
+					Retry: 50,
 				}
 				sse.Encode(w, e)
 				w.(http.Flusher).Flush()

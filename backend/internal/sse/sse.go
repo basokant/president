@@ -30,10 +30,12 @@ type Event[T any] struct {
 }
 
 func Encode[T any](w io.Writer, event Event[T]) error {
-	writeId(w, event.Id)
 	writeEvent(w, event.Event)
+	err := writeData(w, event.Data)
+	writeId(w, event.Id)
 	writeRetry(w, event.Retry)
-	return writeData(w, event.Data)
+
+	return err
 }
 
 func WriteHeaders(w http.ResponseWriter) {
