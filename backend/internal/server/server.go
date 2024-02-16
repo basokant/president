@@ -14,25 +14,33 @@ import (
 )
 
 type Server struct {
-	db   database.Service
-	port int
+	db     database.Service
+	logger *log.Logger
+	port   int
 }
 
 func NewServer(logger *log.Logger) *http.Server {
 	port, _ := strconv.Atoi(os.Getenv("PORT"))
 	NewServer := &Server{
-		port: port,
-		db:   database.New(),
+		db:     database.New(),
+		logger: logger,
+		port:   port,
 	}
 
 	// Declare Server config
 	server := &http.Server{
 		Addr:         fmt.Sprintf(":%d", NewServer.port),
-		Handler:      NewServer.RegisterRoutes(logger),
+		Handler:      NewServer.RegisterRoutes(),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,
 	}
 
 	return server
+}
+
+func (s Server) LogRequest(r *http.Request) {
+	s.logger.Helper()
+	message := fmt.Sprintf("%s %s", r.Method, r.URL.Path)
+	s.logger.Info(message)
 }

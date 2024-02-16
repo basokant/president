@@ -6,26 +6,24 @@ import (
 	"net/http"
 	"president/internal/sse"
 	"time"
-
-	"github.com/charmbracelet/log"
 )
 
-func (s *Server) RegisterRoutes(logger *log.Logger) http.Handler {
+func (s *Server) RegisterRoutes() http.Handler {
 	mux := http.NewServeMux()
-	mux.HandleFunc("GET /health", s.healthHandler(logger))
+	mux.HandleFunc("GET /health", s.healthHandler())
 
-	mux.HandleFunc("GET /events", s.eventsHandler(logger))
+	mux.HandleFunc("GET /events", s.eventsHandler())
 
 	mux.HandleFunc("GET /chat-room", s.getChatHandler())
-	mux.HandleFunc("GET /chat-stream", s.getChatStreamHandler(logger))
-	mux.HandleFunc("POST /chat", s.postChatHandler(logger))
+	mux.HandleFunc("GET /chat-stream", s.getChatStreamHandler())
+	mux.HandleFunc("POST /chat", s.postChatHandler())
 
 	return mux
 }
 
-func (s *Server) healthHandler(logger *log.Logger) http.HandlerFunc {
+func (s *Server) healthHandler() http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		logRequest(logger, r)
+		s.LogRequest(r)
 
 		// Set CORS headers to allow all origins. You may want to restrict this to specific origins in a production environment.
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -34,16 +32,16 @@ func (s *Server) healthHandler(logger *log.Logger) http.HandlerFunc {
 
 		jsonResp, err := json.Marshal(s.db.Health())
 		if err != nil {
-			logger.Error("error handling JSON marshal. Err: %v", err)
+			s.logger.Error("error handling JSON marshal. Err: %v", err)
 		}
 
 		_, _ = w.Write(jsonResp)
 	})
 }
 
-func (s *Server) eventsHandler(logger *log.Logger) http.HandlerFunc {
+func (s *Server) eventsHandler() http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		logRequest(logger, r)
+		logRequest(s.logger, r)
 
 		// Set CORS headers to allow all origins. You may want to restrict this to specific origins in a production environment.
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -65,14 +63,14 @@ func (s *Server) eventsHandler(logger *log.Logger) http.HandlerFunc {
 }
 
 func (s *Server) getChatHandler() http.HandlerFunc {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		html.Execute(w, struct{}{})
 	})
 }
 
-func (s *Server) getChatStreamHandler(logger *log.Logger) http.HandlerFunc {
+func (s *Server) getChatStreamHandler() http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		logRequest(logger, r)
+		logRequest(s.logger, r)
 
 		go func() {
 			// Received Browser Disconnection
@@ -91,7 +89,7 @@ func (s *Server) getChatStreamHandler(logger *log.Logger) http.HandlerFunc {
 
 		for msg := range ch {
 			if msg != nil && msg.Payload != "" {
-				logger.Print("received from chat", "message", msg.Payload)
+				s.logger.Print("received from chat", "message", msg.Payload)
 				e := sse.Event[string]{
 					Data: msg.Payload,
 				}
@@ -100,7 +98,7 @@ func (s *Server) getChatStreamHandler(logger *log.Logger) http.HandlerFunc {
 			}
 		}
 
-		logger.Print("closing chat stream")
+		s.logger.Print("closing chat stream")
 	})
 }
 
@@ -108,9 +106,9 @@ type ChatMessage struct {
 	Message string `json:"message"`
 }
 
-func (s *Server) postChatHandler(logger *log.Logger) http.HandlerFunc {
+func (s *Server) postChatHandler() http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		logRequest(logger, r)
+		logRequest(s.logger, r)
 
 		// Set CORS headers to allow all origins. You may want to restrict this to specific origins in a production environment.
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -119,7 +117,7 @@ func (s *Server) postChatHandler(logger *log.Logger) http.HandlerFunc {
 
 		err := r.ParseMultipartForm(32 << 20)
 		if err != nil {
-			logger.Error("error parsing form. Err: %v", err)
+			s.logger.Error("error parsing form. Err: %v", err)
 			http.Error(w, err.Error(), http.StatusUnprocessableEntity)
 		}
 
@@ -127,11 +125,11 @@ func (s *Server) postChatHandler(logger *log.Logger) http.HandlerFunc {
 
 		err = s.db.SendMessage("chat", message)
 		if err != nil {
-			logger.Error("error sending message. Err: %v", err)
+			s.logger.Error("error sending message. Err: %v", err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 
-		logger.Info("Message sent", "message", message)
+		s.logger.Info("Message sent", "message", message)
 		fmt.Fprint(w, "success")
 	})
 }
