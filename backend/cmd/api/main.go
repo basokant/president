@@ -1,15 +1,24 @@
 package main
 
 import (
-	"fmt"
+	"os"
 	"president/internal/server"
+
+	"github.com/charmbracelet/log"
 )
 
 func main() {
-	server := server.NewServer()
+	logger := log.NewWithOptions(os.Stderr, log.Options{
+		ReportCaller:    true,
+		ReportTimestamp: true,
+	})
+	logger.Info("starting server")
+
+	server := server.NewServer(logger)
 
 	err := server.ListenAndServe()
 	if err != nil {
-		panic(fmt.Sprintf("cannot start server: %s", err))
+		log.Errorf("cannot start server: %s", err)
+		panic("")
 	}
 }
