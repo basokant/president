@@ -1,5 +1,8 @@
 <script>
 	import '../app.pcss';
+	import '@fontsource-variable/dm-sans';
 </script>
 
-<slot />
+<div class="h-dvh w-screen">
+	<slot />
+</div>
