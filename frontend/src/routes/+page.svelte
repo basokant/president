@@ -20,7 +20,7 @@
 		<h1 class="text-6xl font-bold">President</h1>
 		<h2 class="text-2xl font-medium">The Ultimate Social Card Game</h2>
 	</div>
-	<div class="space-x-2">
+	<div class="space-x-4">
 		<Button variant="outlinePrimary">
 			<HelpCircleIcon />
 			<span>How to Play</span>
