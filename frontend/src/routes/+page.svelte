@@ -3,7 +3,13 @@
 	import { Club, Diamond, Heart, HelpCircleIcon, PlusCircle, Spade } from 'lucide-svelte';
 </script>
 
-<div class="flex h-full w-full flex-col items-center justify-center gap-7">
+<img class="absolute -z-10" src="/pattern.svg" alt="playing card symbol pattern" />
+<img
+	class="absolute bottom-0 right-0 -z-10 rotate-180"
+	src="/pattern.svg"
+	alt="playing card symbol pattern"
+/>
+<div class="z-10 flex h-full w-full flex-col items-center justify-center gap-7">
 	<div class="flex flex-col items-center justify-center gap-0.5">
 		<div class="flex w-72 justify-between">
 			<Heart strokeWidth={3} size={30} class="text-primary" />
