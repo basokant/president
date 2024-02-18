@@ -14,12 +14,13 @@ import (
 
 type Service interface {
 	Health() map[string]string
-	SendMessage(channelName string, message string) error
+	SendMessage(channelName string, message any) error
 	SubscribeToChannel(channelName string) <-chan *redis.Message
+	GetPreviousMessagesFrom(channelName string, id int64) []map[string]any
 }
 
 type service struct {
-	db *redis.Client
+	rdb *redis.Client
 }
 
 var (
@@ -43,7 +44,7 @@ func New() Service {
 		DB:       num,
 	})
 
-	s := &service{db: rdb}
+	s := &service{rdb: rdb}
 
 	return s
 }
@@ -52,7 +53,7 @@ func (s *service) Health() map[string]string {
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
-	result, err := s.db.Ping(ctx).Result()
+	result, err := s.rdb.Ping(ctx).Result()
 
 	if err != nil {
 		log.Fatalf(fmt.Sprintf("db down: %v", err))

@@ -38,8 +38,8 @@ func Encode[T any](w io.Writer, event Event[T]) error {
 	return err
 }
 
+// Set the http response headers specific for server sent events
 func WriteHeaders(w http.ResponseWriter) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Connection", "keep-alive")
 	w.Header().Set("Content-Type", "text/event-stream")
@@ -79,8 +79,6 @@ func writeData[T any](w io.Writer, data T) error {
 		}
 		w.Write([]byte("\n"))
 	default:
-		fmt.Printf("Writing data %s to event\n", fmt.Sprint(data))
-
 		dataReplacer.WriteString(w, fmt.Sprint(data))
 		w.Write([]byte("\n\n"))
 	}

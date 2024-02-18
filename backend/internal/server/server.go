@@ -39,8 +39,9 @@ func NewServer(logger *log.Logger) *http.Server {
 	return server
 }
 
-func (s Server) LogRequest(r *http.Request) {
+func (s Server) NewRequestLogger(r *http.Request) *log.Logger {
 	s.logger.Helper()
 	message := fmt.Sprintf("%s %s", r.Method, r.URL.Path)
 	s.logger.Info(message)
+	return s.logger.With("method", r.Method, "URL", r.URL.Path)
 }

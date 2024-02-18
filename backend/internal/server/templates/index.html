@@ -14,7 +14,7 @@
         var source = new EventSource('/chat-stream');
         source.addEventListener('message', function(e) {
             $('#messages').append(e.data + "</br>");
-            $('html, body').animate({scrollTop:$(document).height()}, 'slow');
+            console.log(e)
         }, false);
     </script> 
     </head>
