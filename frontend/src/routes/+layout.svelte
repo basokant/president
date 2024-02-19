@@ -3,6 +3,6 @@
 	import '@fontsource-variable/dm-sans';
 </script>
 
-<div class="h-dvh relative w-screen">
+<main class="relative h-dvh w-screen">
 	<slot />
-</div>
+</main>
