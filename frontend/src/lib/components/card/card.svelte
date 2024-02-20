@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
 	import { type PlayingCard, getCardName, sizes } from '.';
+	import * as Tooltip from '$lib/components/ui/tooltip';
 
 	export let card: PlayingCard;
 	export let size: keyof typeof sizes = 'md';
@@ -18,4 +19,11 @@
 	]);
 </script>
 
-<img style:width class={cardClass} src={cardPath} alt={cardName} />
+<Tooltip.Root openDelay={100}>
+	<Tooltip.Trigger>
+		<img style:width class={cardClass} src={cardPath} alt={cardName} />
+	</Tooltip.Trigger>
+	<Tooltip.Content side="bottom">
+		{cardName}
+	</Tooltip.Content>
+</Tooltip.Root>
