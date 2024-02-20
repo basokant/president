@@ -3,7 +3,7 @@
 	export let card: PlayingCard;
 
 	const cardName = getCardName(card);
-	const cardPath = `/${cardName}.svg`;
+	const cardPath = `/cards/${cardName}.svg`;
 </script>
 
 <img src={cardPath} alt={cardName} />
