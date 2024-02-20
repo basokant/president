@@ -1,4 +1,5 @@
 import Root from './card.svelte';
+import SpecialCardsToggleGroup from './special-cards-toggle-group.svelte';
 
 export const suits = ['hearts', 'clubs', 'diamonds', 'spades'] as const;
 export type Suit = (typeof suits)[number];
@@ -24,6 +25,7 @@ export type PlayingCard =
 	| {
 			rank: Rank;
 			suit: Suit;
+			name?: string;
 	  }
 	| 'joker';
 export type CardName = `${Rank}-of-${Suit}` | 'joker-1' | 'joker-2';
@@ -37,4 +39,11 @@ export function getCardName(card: PlayingCard): CardName {
 	return `${card.rank}-of-${card.suit}`;
 }
 
-export { Root as Card };
+export const sizes = {
+	sm: '100px',
+	md: '165px',
+	lg: '215px',
+	xl: '300px'
+} as const;
+
+export { Root as Card, SpecialCardsToggleGroup };
