@@ -3,6 +3,10 @@
 	import { Club, Diamond, Heart, HelpCircleIcon, PlusCircle, Spade } from 'lucide-svelte';
 </script>
 
+<svelte:head>
+	<title>President | The Ultimate Social Card Game</title>
+</svelte:head>
+
 <img class="absolute -z-10" src="/pattern.svg" alt="playing card symbol pattern" />
 <img
 	class="absolute bottom-0 right-0 -z-10 rotate-180"
