@@ -1,17 +1,17 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
-	import { type PlayingCard, getCardName, sizes } from '.';
+	import { type PlayingCard, getCardId, sizes } from '.';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 
 	export let card: PlayingCard;
 	export let size: keyof typeof sizes = 'md';
 	export let playerBorderColor = '';
 
-	const cardName = getCardName(card);
-	const cardPath = `/cards/${cardName}.svg`;
-	const width = sizes[size];
+	$: cardName = getCardId(card);
+	$: cardPath = `/cards/${cardName}.svg`;
+	$: width = sizes[size];
 
-	const cardClass = cn([
+	$: cardClass = cn([
 		{
 			[`border-${playerBorderColor} border-4`]: playerBorderColor
 		},

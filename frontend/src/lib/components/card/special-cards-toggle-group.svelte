@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { ToggleGroup } from 'bits-ui';
-	import { type PlayingCard, getCardName, type CardName } from '.';
+	import { Label } from '$lib/components/ui/label';
+	import { getCardId, type PlayingCard } from '.';
 	import Card from './card.svelte';
 	import { draw, fade } from 'svelte/transition';
 
@@ -38,7 +39,9 @@
 	bind:value={selectedCardIds}
 >
 	{#each specialCards as card, i (i)}
+		{@const cardName = getCardId(card)}
 		<ToggleGroup.Item
+			id={cardName}
 			value={i.toString()}
 			class="group relative inline-flex flex-col items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
 		>
@@ -59,7 +62,7 @@
 				</svg>
 			{/if}
 			<Card {card} />
-			<h4>{card !== 'joker' ? card?.name : 'Joker (x2)'}</h4>
+			<Label for={cardName}>{card !== 'joker' ? card?.name : 'Joker (x2)'}</Label>
 		</ToggleGroup.Item>
 	{/each}
 </ToggleGroup.Root>

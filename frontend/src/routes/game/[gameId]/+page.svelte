@@ -46,24 +46,28 @@
 			</h3>
 			<div class="grid grid-cols-2 gap-x-5">
 				<Rule
+					id="communism"
 					name="Communism Trades"
 					description="Reverse the trades, so that the President trades their two highest rank cards with the Bum’s two lowest rank cards."
 				>
 					<RefreshCw />
 				</Rule>
 				<Rule
+					id="duplicate"
 					name="Duplicate Plays Burn"
 					description="When a duplicate play is made, the pile is burned, and the last player can start the pile again."
 				>
 					<Flame />
 				</Rule>
 				<Rule
+					id="bum-start"
 					name="Bum Starts the Game"
 					description="The Bum player starts first, instead of always starting with whoever has the 3 of ♣’s"
 				>
 					<ArrowUpNarrowWide />
 				</Rule>
 				<Rule
+					id="runs"
 					name="Card Runs"
 					description="Players are able to start a pile with a play of consecutive runs of cards (up to 4) in ascending rank."
 				>

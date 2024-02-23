@@ -28,9 +28,9 @@ export type PlayingCard =
 			name?: string;
 	  }
 	| 'joker';
-export type CardName = `${Rank}-of-${Suit}` | 'joker-1' | 'joker-2';
+export type CardId = `${Rank}-of-${Suit}` | 'joker-1' | 'joker-2';
 
-export function getCardName(card: PlayingCard): CardName {
+export function getCardId(card: PlayingCard): CardId {
 	const isJoker = card == 'joker';
 	if (isJoker) {
 		return 'joker-1';
