@@ -14,19 +14,31 @@
 	} from 'lucide-svelte';
 	import { page } from '$app/stores';
 	import Rule from '$lib/components/rule.svelte';
-	import { SpecialCardsToggleGroup } from '$lib/components/card';
+	import { SpecialCardsToggleGroup, type PlayingCard } from '$lib/components/card';
 	import { Button } from '$lib/components/ui/button';
+
+	let selectedCards: PlayingCard[] = [];
+
+	$: {
+		console.log(selectedCards);
+	}
 </script>
 
 <div class="flex flex-1 flex-grow flex-row gap-8 py-5">
 	<PlayersList class="w-1/5" />
 	<Separator orientation="vertical" class="h-auto" />
-	<div class="flex-1 space-y-3">
+	<div class="flex-1 space-y-5">
 		<div class="space-y-2">
 			<h3 class="flex items-center gap-2 text-lg font-medium text-primary">
 				<span>Invite Your Friends</span><Link2 />
 			</h3>
-			<ShareLink link={'https://president.basokant.com' + $page.url.pathname} />
+			<div class="flex gap-5">
+				<ShareLink link={'https://president.basokant.com' + $page.url.pathname} />
+				<Button>
+					<PlayCircle />
+					<span>Start Game</span>
+				</Button>
+			</div>
 		</div>
 		<div class="space-y-2">
 			<h3 class="flex items-center gap-2 text-lg font-medium text-primary">
@@ -63,14 +75,7 @@
 			<h3 class="flex items-center gap-2 text-lg font-medium text-primary">
 				<span>Special Cards</span><Sparkle />
 			</h3>
-			<SpecialCardsToggleGroup />
-		</div>
-		<div class="flex items-center justify-center gap-5">
-			<Separator class="w-auto flex-1 border-dotted" />
-			<Button>
-				<PlayCircle />
-				<span>Start Game</span>
-			</Button>
+			<SpecialCardsToggleGroup bind:selectedCards />
 		</div>
 	</div>
 </div>

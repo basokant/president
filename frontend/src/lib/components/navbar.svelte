@@ -2,6 +2,7 @@
 	import { HelpCircle, Club, Diamond, Heart, Spade } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button';
 	import Separator from './ui/separator/separator.svelte';
+	import ModeSwitcher from './mode-switcher.svelte';
 </script>
 
 <nav class="flex flex-row items-center justify-between py-2 pt-3">
@@ -12,9 +13,12 @@
 		<Diamond strokeWidth={3} size={20} class=" text-primary " />
 		<Spade strokeWidth={3} size={20} />
 	</div>
-	<Button variant="outlinePrimary">
-		<HelpCircle />
-		<span>How to Play</span>
-	</Button>
+	<div class="flex items-center gap-2">
+		<Button variant="outlinePrimary">
+			<HelpCircle />
+			<span>How to Play</span>
+		</Button>
+		<ModeSwitcher />
+	</div>
 </nav>
 <Separator orientation="horizontal" />

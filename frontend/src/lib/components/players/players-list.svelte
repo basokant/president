@@ -13,8 +13,24 @@
 		}
 	];
 
+	$: nextPlayerId = Math.max(...players.map((p) => p.id)) + 1;
 	$: user = players[0];
 	$: otherPlayers = players.filter((player) => player !== user);
+	$: numComputers = players.filter((p) => p.isComputer).length;
+
+	function addComputer() {
+		if (players.length == 8) {
+			return;
+		}
+
+		const newComputer: Player = {
+			id: nextPlayerId,
+			name: `Computer ${numComputers + 1}`,
+			colour: 'green-600',
+			isComputer: true
+		};
+		players = [...players, newComputer];
+	}
 </script>
 
 <div class={cn('flex flex-col gap-2', $$props.class)}>
@@ -30,7 +46,7 @@
 			<PlayerItem {player} />
 		{/each}
 	</div>
-	<Button variant="filled">
+	<Button variant="filled" on:click={addComputer}>
 		<PlusCircle />
 		<span>Add Computer</span>
 	</Button>

@@ -16,13 +16,13 @@
 >
 	<div class="flex flex-1 items-center gap-3">
 		<div class={cn('size-3 rounded-full bg-background', player.colour && `bg-${player.colour}`)} />
-		<span class="font-semibold">{player.name}</span>
 		{#if player.isHost}
 			<Crown class="size-4" />
 		{/if}
 		{#if player.isComputer}
 			<Bot class="size-4" />
 		{/if}
+		<span class="font-semibold">{player.name}</span>
 	</div>
 	{#if isUser}
 		<Button

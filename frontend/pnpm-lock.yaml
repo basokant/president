@@ -17,6 +17,9 @@ dependencies:
   lucide-svelte:
     specifier: ^0.331.0
     version: 0.331.0(svelte@4.2.7)
+  mode-watcher:
+    specifier: ^0.2.1
+    version: 0.2.1(svelte@4.2.7)
   motion:
     specifier: ^10.17.0
     version: 10.17.0
@@ -1977,6 +1980,14 @@ packages:
       pkg-types: 1.0.3
       ufo: 1.4.0
     dev: true
+
+  /mode-watcher@0.2.1(svelte@4.2.7):
+    resolution: {integrity: sha512-HLmJgG5kmJCFR/+rcG2te54HjIxqk7BTAsFnsygZR5hcOYlhLEJQ0V8rh1axv2JQIbOAZs1yPlUBSpVATRFtUw==}
+    peerDependencies:
+      svelte: ^4.0.0
+    dependencies:
+      svelte: 4.2.7
+    dev: false
 
   /motion@10.17.0:
     resolution: {integrity: sha512-yBHYkrnJRiomuo88YQzG/v+nzFXKNlKw/Hh7uy8AV7nrYHnE07O6PEECShGbFmZvLrAOGc9qKzEDYmspDYjNWw==}
