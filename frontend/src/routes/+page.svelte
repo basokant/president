@@ -29,7 +29,7 @@
 			<HelpCircleIcon />
 			<span>How to Play</span>
 		</Button>
-		<Button>
+		<Button href="/game/15">
 			<PlusCircle />
 			<span>Create Game</span>
 		</Button>

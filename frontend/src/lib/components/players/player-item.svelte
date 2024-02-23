@@ -1,0 +1,35 @@
+<script lang="ts">
+	import { cn } from '$lib/utils';
+	import { Bot, Crown, Pencil } from 'lucide-svelte';
+	import type { Player } from '.';
+	import { Button } from '../ui/button';
+
+	export let player: Player;
+	export let isUser = false;
+</script>
+
+<div
+	class={cn(
+		'flex h-10 items-center pl-3',
+		isUser && player.colour && `border-2 border-${player.colour}`
+	)}
+>
+	<div class="flex flex-1 items-center gap-3">
+		<div class={cn('size-3 rounded-full bg-background', player.colour && `bg-${player.colour}`)} />
+		<span class="font-semibold">{player.name}</span>
+		{#if player.isHost}
+			<Crown class="size-4" />
+		{/if}
+		{#if player.isComputer}
+			<Bot class="size-4" />
+		{/if}
+	</div>
+	{#if isUser}
+		<Button
+			class={cn('size-9 p-1', player.colour && `hover:bg-${player.colour}/30`)}
+			variant="ghost"
+		>
+			<Pencil class={cn('size-4', player.colour && `text-${player.colour}`)} />
+		</Button>
+	{/if}
+</div>

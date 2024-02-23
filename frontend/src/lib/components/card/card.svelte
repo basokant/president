@@ -23,7 +23,7 @@
 	<Tooltip.Trigger>
 		<img style:width class={cardClass} src={cardPath} alt={cardName} />
 	</Tooltip.Trigger>
-	<Tooltip.Content side="bottom">
+	<Tooltip.Content>
 		{cardName}
 	</Tooltip.Content>
 </Tooltip.Root>
