@@ -18,10 +18,6 @@
 	import { Button } from '$lib/components/ui/button';
 
 	let selectedCards: PlayingCard[] = [];
-
-	$: {
-		console.log(selectedCards);
-	}
 </script>
 
 <div class="flex flex-1 flex-grow flex-row gap-8 py-5">
@@ -32,7 +28,7 @@
 			<h3 class="flex items-center gap-2 text-lg font-medium text-primary">
 				<span>Invite Your Friends</span><Link2 />
 			</h3>
-			<div class="flex gap-5">
+			<div class="flex gap-2">
 				<ShareLink link={'https://president.basokant.com' + $page.url.pathname} />
 				<Button>
 					<PlayCircle />
