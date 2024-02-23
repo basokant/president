@@ -4,7 +4,12 @@ import { fontFamily } from 'tailwindcss/defaultTheme';
 const config = {
 	darkMode: ['class'],
 	content: ['./src/**/*.{html,js,svelte,ts}'],
-	safelist: ['dark'],
+	safelist: [
+		'dark',
+		{
+			pattern: /(bg|text|border)-(red|orange|yellow|lime|emerald|cyan|blue|indigo|purple|pink)-500/
+		}
+	],
 	theme: {
 		container: {
 			center: true,

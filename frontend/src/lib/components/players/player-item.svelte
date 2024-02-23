@@ -11,11 +11,13 @@
 <div
 	class={cn(
 		'flex h-10 items-center pl-3',
-		isUser && player.colour && `border-2 border-${player.colour}`
+		isUser && player.colour && `border-2 border-${player.colour}-500`
 	)}
 >
 	<div class="flex flex-1 items-center gap-3">
-		<div class={cn('size-3 rounded-full bg-background', player.colour && `bg-${player.colour}`)} />
+		<div
+			class={cn('size-3 rounded-full bg-background', player.colour && `bg-${player.colour}-500`)}
+		/>
 		{#if player.isHost}
 			<Crown class="size-4" />
 		{/if}
@@ -25,11 +27,8 @@
 		<span class="font-semibold">{player.name}</span>
 	</div>
 	{#if isUser}
-		<Button
-			class={cn('size-9 p-1', player.colour && `hover:bg-${player.colour}/30`)}
-			variant="ghost"
-		>
-			<Pencil class={cn('size-4', player.colour && `text-${player.colour}`)} />
+		<Button class="size-9 p-1" variant="ghost">
+			<Pencil class="size-4" />
 		</Button>
 	{/if}
 </div>

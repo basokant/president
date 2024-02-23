@@ -28,7 +28,7 @@
 	<PlayersList class="w-1/5" />
 	<Separator orientation="vertical" class="h-auto" />
 	<div class="flex-1 space-y-5">
-		<div class="space-y-2">
+		<div class="space-y-3">
 			<h3 class="flex items-center gap-2 text-lg font-medium text-primary">
 				<span>Invite Your Friends</span><Link2 />
 			</h3>

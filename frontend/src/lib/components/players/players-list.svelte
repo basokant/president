@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
 	import { PlusCircle, UsersRound } from 'lucide-svelte';
-	import { type Player } from '.';
+	import { colours, type Player } from '.';
 	import { Button } from '../ui/button';
 	import PlayerItem from './player-item.svelte';
 
@@ -9,7 +9,8 @@
 		{
 			id: 0,
 			name: 'Ben',
-			colour: 'green-600'
+			colour: 'emerald',
+			isHost: true
 		}
 	];
 
@@ -17,6 +18,7 @@
 	$: user = players[0];
 	$: otherPlayers = players.filter((player) => player !== user);
 	$: numComputers = players.filter((p) => p.isComputer).length;
+	$: availableColours = colours.filter((c) => !players.some((p, i, a) => p.colour === c));
 
 	function addComputer() {
 		if (players.length == 8) {
@@ -26,7 +28,7 @@
 		const newComputer: Player = {
 			id: nextPlayerId,
 			name: `Computer ${numComputers + 1}`,
-			colour: 'green-600',
+			colour: availableColours[Math.floor(Math.random() * availableColours.length)],
 			isComputer: true
 		};
 		players = [...players, newComputer];
@@ -46,8 +48,10 @@
 			<PlayerItem {player} />
 		{/each}
 	</div>
-	<Button variant="filled" on:click={addComputer}>
-		<PlusCircle />
-		<span>Add Computer</span>
-	</Button>
+	{#if user.isHost}
+		<Button variant="filled" on:click={addComputer}>
+			<PlusCircle />
+			<span>Add Computer</span>
+		</Button>
+	{/if}
 </div>

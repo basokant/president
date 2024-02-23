@@ -3,5 +3,20 @@ export type Player = {
 	name: string;
 	isHost?: boolean;
 	isComputer?: boolean;
-	colour: string;
+	colour: Colour;
 };
+
+export const colours = [
+	'red',
+	'orange',
+	'yellow',
+	'lime',
+	'emerald',
+	'cyan',
+	'blue',
+	'indigo',
+	'purple',
+	'pink'
+] as const;
+
+export type Colour = (typeof colours)[number];
