@@ -5,11 +5,17 @@
 	export let link: string;
 </script>
 
-<div class="flex h-10 flex-1 items-center justify-center">
-	<div class="flex h-full flex-1 items-center border-2 border-border px-3 py-1 align-middle">
+<div class="flex min-h-10 flex-1 items-center justify-center">
+	<div
+		class="flex h-full flex-1 items-center overflow-hidden text-ellipsis border-2 border-border px-3 py-1 align-middle"
+	>
 		{link}
 	</div>
-	<Button on:click={() => navigator.clipboard.writeText(link)} variant="filled" class="size-10">
+	<Button
+		on:click={() => navigator.clipboard.writeText(link)}
+		variant="filled"
+		class="size-9 p-2 lg:size-10 lg:p-3"
+	>
 		<Copy strokeWidth={2.5} />
 	</Button>
 </div>

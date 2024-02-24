@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
-	import { PlusCircle, UsersRound } from 'lucide-svelte';
+	import { ChevronsUpDown, Construction, PlusCircle, UsersRound } from 'lucide-svelte';
 	import { colours, type Player } from '.';
 	import { Button } from '../ui/button';
 	import PlayerItem from './player-item.svelte';
+	import * as Collapsible from '$lib/components/ui/collapsible';
 
 	let players: Player[] = [
 		{
@@ -35,23 +36,35 @@
 	}
 </script>
 
-<div class={cn('flex flex-col gap-2', $$props.class)}>
+<Collapsible.Root open class={cn('flex flex-col gap-2', $$props.class)}>
 	<div class="flex flex-row items-center gap-2">
 		<UsersRound strokeWidth={2} />
-		<h4 class="text-lg font-medium">
+		<h4 class="flex-1 text-lg font-medium">
 			{players.length}/8 Players
 		</h4>
+		<Collapsible.Trigger asChild let:builder>
+			<Button builders={[builder]} variant="ghost" size="sm" class="w-9 p-0">
+				<ChevronsUpDown class="h-4 w-4" />
+				<span class="sr-only">Toggle</span>
+			</Button>
+		</Collapsible.Trigger>
 	</div>
-	<div class="py-1">
-		<PlayerItem player={user} isUser />
+	<PlayerItem player={user} isUser />
+	<Collapsible.Content class="py-0">
 		{#each otherPlayers as player, i (i)}
 			<PlayerItem {player} />
 		{/each}
-	</div>
+		{#if otherPlayers.length === 0}
+			<div class="flex items-center gap-2 p-3">
+				<Construction />
+				<span>No other players</span>
+			</div>
+		{/if}
+	</Collapsible.Content>
 	{#if user.isHost}
-		<Button variant="filled" on:click={addComputer}>
+		<Button disabled={players.length === 8} variant="filled" on:click={addComputer}>
 			<PlusCircle />
 			<span>Add Computer</span>
 		</Button>
 	{/if}
-</div>
+</Collapsible.Root>

@@ -13,7 +13,7 @@ const buttonVariants = tv({
 			secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
 			filled: 'bg-foreground text-background hover:bg-foreground/85',
 			ghost: 'hover:bg-accent hover:text-accent-foreground',
-			link: 'text-primary underline-offset-4 hover:underline'
+			link: 'underline-offset-4 hover:underline'
 		},
 		size: {
 			default: 'h-10 px-3 py-2 space-x-3',

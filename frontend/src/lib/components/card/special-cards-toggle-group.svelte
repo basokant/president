@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { ToggleGroup } from 'bits-ui';
-	import { Label } from '$lib/components/ui/label';
 	import { getCardId, type PlayingCard } from '.';
 	import Card from './card.svelte';
 	import { draw, fade } from 'svelte/transition';
@@ -33,19 +32,27 @@
 	] as const;
 </script>
 
-<ToggleGroup.Root class="flex justify-between" type="multiple" bind:value={selectedCardIds}>
+<ToggleGroup.Root
+	class="flex flex-wrap justify-between gap-2"
+	type="multiple"
+	bind:value={selectedCardIds}
+>
 	{#each specialCards as card, i (i)}
 		{@const cardName = getCardId(card)}
 		{@const label = card === 'joker' ? 'Joker (x2)' : card?.name ?? ''}
 		<ToggleGroup.Item
 			id={cardName}
 			value={i.toString()}
-			class="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+			class="group "
 			on:click={() => console.log('clicked', cardName)}
 			asChild
 			let:builder
 		>
-			<div use:builder.action {...builder} class="relative">
+			<div
+				use:builder.action
+				{...builder}
+				class="relative pb-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+			>
 				<Card {card} {label} />
 				{#if selectedCardIds.includes(i.toString())}
 					<svg

@@ -20,15 +20,16 @@
 	let selectedCards: PlayingCard[] = [];
 </script>
 
-<div class="flex flex-1 flex-grow flex-row gap-8 py-5">
-	<PlayersList class="w-1/5" />
-	<Separator orientation="vertical" class="h-auto" />
+<div class="z-10 flex flex-1 flex-grow flex-col gap-6 py-5 md:flex-row lg:gap-8">
+	<PlayersList class="lg:w-1/5" />
+	<Separator orientation="vertical" class="hidden lg:block" />
+	<Separator orientation="horizontal" class="md:hidden" />
 	<div class="flex-1 space-y-5">
 		<div class="space-y-3">
 			<h3 class="flex items-center gap-2 text-lg font-medium text-primary">
 				<span>Invite Your Friends</span><Link2 />
 			</h3>
-			<div class="flex gap-2">
+			<div class="flex flex-col gap-2 lg:flex-row">
 				<ShareLink link={'https://president.basokant.com' + $page.url.pathname} />
 				<Button>
 					<PlayCircle />
@@ -40,7 +41,7 @@
 			<h3 class="flex items-center gap-2 text-lg font-medium text-primary">
 				<span>Custom Rules</span><Scale />
 			</h3>
-			<div class="grid grid-cols-2 gap-x-5">
+			<div class="grid w-full grid-cols-1 gap-x-5 lg:grid-cols-2">
 				<Rule
 					id="communism"
 					name="Communism Trades"
