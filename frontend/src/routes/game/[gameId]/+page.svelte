@@ -17,11 +17,15 @@
 	import { SpecialCardsToggleGroup, type PlayingCard } from '$lib/components/card';
 	import { Button } from '$lib/components/ui/button';
 	import AddEditPlayer from '$lib/components/players/add-edit-player.svelte';
+	import { getPlayersStore } from '$lib/stores/players.store';
 
 	let selectedCards: PlayingCard[] = [];
+
+	let players = getPlayersStore();
+	$: user = $players.filter((p) => p.isUser)[0];
 </script>
 
-<AddEditPlayer open />
+<AddEditPlayer open={!user} />
 <div class="z-10 flex flex-1 flex-grow flex-col gap-6 py-5 md:flex-row lg:gap-8">
 	<PlayersList class="lg:w-1/5" />
 	<Separator orientation="vertical" class="hidden lg:block" />

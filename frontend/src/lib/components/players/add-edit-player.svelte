@@ -4,7 +4,7 @@
 	import * as Dialog from '../ui/dialog';
 	import { Input } from '../ui/input';
 	import ColourPicker from '../colour-picker.svelte';
-	import { type Player } from '.';
+	import { type Colour, type Player } from '.';
 	import { getPlayersStore } from '$lib/stores/players.store';
 	import { toast } from 'svelte-sonner';
 
@@ -12,12 +12,22 @@
 	export let player: Player | undefined = undefined;
 	export let open = false;
 
+	export let onSubmit: (
+		name: string | undefined,
+		colour: Colour | undefined,
+		player?: Player
+	) => void = addEditPlayer;
+
 	$: isEdit = !!player;
 
 	let name = player?.name || '';
 	let colour = player?.colour;
 
-	function addEditPlayer(): void {
+	function addEditPlayer(
+		name: string | undefined,
+		colour: Colour | undefined,
+		player?: Player
+	): void {
 		if (!name) {
 			toast.error('Name is required to create a player');
 			return;
@@ -60,7 +70,7 @@
 		<Dialog.Header>
 			<Dialog.Title>Create your Player</Dialog.Title>
 		</Dialog.Header>
-		<form on:submit={addEditPlayer} class="flex flex-col gap-6">
+		<form on:submit={() => onSubmit(name, colour, player)} class="flex flex-col gap-6">
 			<div class="space-y-2 py-1">
 				<h3>What's your Nickname?</h3>
 				<Input required autofocus type="text" bind:value={name} />

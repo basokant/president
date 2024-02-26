@@ -24,7 +24,7 @@ function createPlayersStore(initialPlayers: Player[]) {
 			const updatedPlayer = {
 				...players[i],
 				...updatePlayer
-			};
+			} as Player;
 
 			players[i] = updatedPlayer;
 			return players;
