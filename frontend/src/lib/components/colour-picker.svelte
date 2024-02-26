@@ -1,29 +1,34 @@
 <script lang="ts">
+	import { getPlayersStore } from '$lib/stores/players.store';
 	import { cn } from '$lib/utils';
-	import { colours } from './players';
-	import * as ToggleGroup from './ui/toggle-group';
-	import { ToggleGroup as ToggleGroupPrimitive } from 'bits-ui';
+	import { colours, type Colour } from './players';
+	import { RadioGroup } from 'bits-ui';
 
-	export let selectedColour: string = colours[0];
+	export let colour: Colour = colours[0];
+	export let initialColour: Colour | undefined = undefined;
+
+	let players = getPlayersStore();
+	const availableColours = colours.filter(
+		(c) => !$players.some((p, i, a) => c === p.colour && c !== initialColour)
+	);
 </script>
 
-<ToggleGroup.Root
-	type="single"
-	class="flex flex-wrap justify-between gap-2"
-	bind:value={selectedColour}
+<RadioGroup.Root
+	orientation="horizontal"
+	class="flex flex-wrap justify-between gap-4 md:gap-2"
+	bind:value={colour}
 >
-	{#each colours as colour, i (i)}
-		<ToggleGroupPrimitive.Item value={colour} aria-label={`Select ${colour}`} asChild let:builder>
+	{#each availableColours as col, i (i)}
+		<RadioGroup.Item value={col} aria-label={`Select ${col}`} asChild let:builder>
 			<div
 				use:builder.action
 				{...builder}
 				class={cn(
-					'size-8 rounded-full',
-					`bg-${colour}-500`,
-					selectedColour === colour &&
-						` ring-2 ring-offset-4 ring-offset-background ring-${colour}-500`
+					'size-11 cursor-pointer rounded-full md:size-8',
+					`bg-${col}-500`,
+					colour === col && `ring-2 ring-offset-4 ring-offset-background ring-${col}-500`
 				)}
 			/>
-		</ToggleGroupPrimitive.Item>
+		</RadioGroup.Item>
 	{/each}
-</ToggleGroup.Root>
+</RadioGroup.Root>

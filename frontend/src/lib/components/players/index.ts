@@ -1,6 +1,7 @@
 export type Player = {
 	id: number;
 	name: string;
+	isUser?: boolean;
 	isHost?: boolean;
 	isComputer?: boolean;
 	colour: Colour;

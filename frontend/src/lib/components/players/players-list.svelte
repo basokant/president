@@ -5,34 +5,27 @@
 	import { Button } from '../ui/button';
 	import PlayerItem from './player-item.svelte';
 	import * as Collapsible from '$lib/components/ui/collapsible';
+	import { getPlayersStore } from '$lib/stores/players.store';
 
-	let players: Player[] = [
-		{
-			id: 0,
-			name: 'Ben',
-			colour: 'emerald',
-			isHost: true
-		}
-	];
+	let players = getPlayersStore();
 
-	$: nextPlayerId = Math.max(...players.map((p) => p.id)) + 1;
-	$: user = players[0];
-	$: otherPlayers = players.filter((player) => player !== user);
-	$: numComputers = players.filter((p) => p.isComputer).length;
-	$: availableColours = colours.filter((c) => !players.some((p, i, a) => p.colour === c));
+	$: user = $players.find((p) => p.isUser);
+	$: otherPlayers = $players.filter((player) => !player.isUser);
+	$: numComputers = $players.filter((p) => p.isComputer).length;
+	$: availableColours = colours.filter((c) => !$players.some((p, i, a) => p.colour === c));
 
 	function addComputer() {
-		if (players.length == 8) {
+		if ($players.length == 8) {
 			return;
 		}
 
-		const newComputer: Player = {
-			id: nextPlayerId,
+		const newComputer: Omit<Player, 'id'> = {
 			name: `Computer ${numComputers + 1}`,
 			colour: availableColours[Math.floor(Math.random() * availableColours.length)],
 			isComputer: true
 		};
-		players = [...players, newComputer];
+
+		players.addPlayer(newComputer);
 	}
 </script>
 
@@ -40,7 +33,7 @@
 	<div class="flex flex-row items-center gap-2">
 		<UsersRound strokeWidth={2} />
 		<h4 class="flex-1 text-lg font-medium">
-			{players.length}/8 Players
+			{$players.length}/8 Players
 		</h4>
 		<Collapsible.Trigger asChild let:builder>
 			<Button builders={[builder]} variant="ghost" size="sm" class="w-9 p-0">
@@ -49,7 +42,15 @@
 			</Button>
 		</Collapsible.Trigger>
 	</div>
-	<PlayerItem player={user} isUser />
+	{#if !!user}
+		<PlayerItem player={user} isUser />
+	{/if}
+	{#if user?.isHost}
+		<Button disabled={$players.length === 8} variant="filled" on:click={addComputer}>
+			<PlusCircle />
+			<span>Add Computer</span>
+		</Button>
+	{/if}
 	<Collapsible.Content class="py-0">
 		{#each otherPlayers as player, i (i)}
 			<PlayerItem {player} />
@@ -61,10 +62,4 @@
 			</div>
 		{/if}
 	</Collapsible.Content>
-	{#if user.isHost}
-		<Button disabled={players.length === 8} variant="filled" on:click={addComputer}>
-			<PlusCircle />
-			<span>Add Computer</span>
-		</Button>
-	{/if}
 </Collapsible.Root>
