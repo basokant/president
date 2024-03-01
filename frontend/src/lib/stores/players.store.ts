@@ -1,4 +1,4 @@
-import type { Player } from '$lib/components/players';
+import type { Player } from '$lib/types/player';
 import { getContext, setContext } from 'svelte';
 import { writable } from 'svelte/store';
 

@@ -4,58 +4,24 @@
 	import * as Dialog from '../ui/dialog';
 	import { Input } from '../ui/input';
 	import ColourPicker from '../colour-picker.svelte';
-	import { type Colour, type Player } from '.';
-	import { getPlayersStore } from '$lib/stores/players.store';
-	import { toast } from 'svelte-sonner';
+	import { gameSchema } from '$lib/types/player';
+	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
+	import * as Form from '$lib/components/ui/form';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { page } from '$app/stores';
 
-	let players = getPlayersStore();
-	export let player: Player | undefined = undefined;
-	export let open = false;
+	const data: SuperValidated<Infer<typeof gameSchema>> = $page.data.playerForm;
 
-	export let onSubmit: (
-		name: string | undefined,
-		colour: Colour | undefined,
-		player?: Player
-	) => void = addEditPlayer;
+	const form = superForm(data, {
+		validators: zodClient(gameSchema)
+	});
 
-	$: isEdit = !!player;
+	const { form: formData, enhance } = form;
 
-	let name = player?.name || '';
-	let colour = player?.colour;
+	export let open = true;
+	export let action: string = '?/player';
 
-	function addEditPlayer(
-		name: string | undefined,
-		colour: Colour | undefined,
-		player?: Player
-	): void {
-		if (!name) {
-			toast.error('Name is required to create a player');
-			return;
-		}
-
-		if (!colour) {
-			toast.error('Colour is required to create a player');
-			return;
-		}
-
-		if (isEdit) {
-			players.editPlayer(player?.id ?? -1, { name, colour });
-			open = false;
-			return;
-		}
-
-		if ($players.length === 8) {
-			toast.error('No more space for players, 8 is the maximum');
-		}
-
-		let isHost = false;
-		if ($players.length === 0) {
-			isHost = true;
-		}
-
-		players.addPlayer({ name, colour, isUser: true, isHost });
-		open = false;
-	}
+	const isEdit = !!$formData.name;
 </script>
 
 <Dialog.Root bind:open closeOnOutsideClick={isEdit} closeOnEscape={isEdit}>
@@ -70,16 +36,16 @@
 		<Dialog.Header>
 			<Dialog.Title>Create your Player</Dialog.Title>
 		</Dialog.Header>
-		<form on:submit={() => onSubmit(name, colour, player)} class="flex flex-col gap-6">
-			<div class="space-y-2 py-1">
+		<form class="flex flex-col gap-6" method="post" {action} use:enhance>
+			<Form.Field {form} name="name" class="space-y-2 py-1">
 				<h3>What's your Nickname?</h3>
-				<Input required autofocus type="text" bind:value={name} />
-			</div>
-			<div class="space-y-2 py-1">
+				<Input required autofocus type="text" bind:value={$formData.name} />
+			</Form.Field>
+			<Form.Field {form} name="colour" class="space-y-2 py-1">
 				<h3>Choose a Colour!</h3>
-				<ColourPicker bind:colour initialColour={colour} />
-			</div>
-			<Button class="w-44 gap-2 self-end" type="submit">
+				<ColourPicker initialColour={$formData.colour} bind:colour={$formData.colour} />
+			</Form.Field>
+			<Form.Button class="w-44 gap-2 self-end">
 				{#if isEdit}
 					<Save />
 					<span>Save Player</span>
@@ -87,7 +53,7 @@
 					<LogIn />
 					Join Game
 				{/if}
-			</Button>
+			</Form.Button>
 		</form>
 	</Dialog.Content>
 </Dialog.Root>

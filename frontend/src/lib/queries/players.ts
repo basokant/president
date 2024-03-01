@@ -1,4 +1,4 @@
-import type { Player } from '$lib/components/players';
+import type { Player } from '$lib/types/player';
 
 export async function getPlayers(gameId: string): Promise<Player[]> {
 	// TODO: implement fetch for getting players from backend for specific game
@@ -6,7 +6,8 @@ export async function getPlayers(gameId: string): Promise<Player[]> {
 		{
 			id: 0,
 			name: 'Kevin',
-			colour: 'indigo'
+			colour: 'indigo',
+			isHost: true
 		},
 		{
 			id: 1,
@@ -17,13 +18,6 @@ export async function getPlayers(gameId: string): Promise<Player[]> {
 			id: 2,
 			name: 'Asith',
 			colour: 'blue'
-		},
-		{
-			id: 3,
-			name: 'Ben',
-			colour: 'emerald',
-			isUser: true,
-			isHost: true
 		}
 	];
 }

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
 	import { ChevronsUpDown, Construction, PlusCircle, UsersRound } from 'lucide-svelte';
-	import { colours, type Player } from '.';
+	import { colours, type Player } from '$lib/types/player';
 	import { Button } from '../ui/button';
 	import PlayerItem from './player-item.svelte';
 	import * as Collapsible from '$lib/components/ui/collapsible';
@@ -21,7 +21,7 @@
 
 		const newComputer: Omit<Player, 'id'> = {
 			name: `Computer ${numComputers + 1}`,
-			colour: availableColours[Math.floor(Math.random() * availableColours.length)],
+			colour: availableColours[Math.floor(Math.random() * availableColours.length)] ?? 'red',
 			isComputer: true
 		};
 

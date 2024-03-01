@@ -1,20 +1,15 @@
 <script lang="ts">
 	import { getPlayersStore } from '$lib/stores/players.store';
 	import { cn } from '$lib/utils';
-	import { colours, type Colour, type Player } from './players';
+	import { colours, type Colour } from '$lib/types/player';
+	import { getAvailableColours } from '$lib/utils/colour';
 	import { RadioGroup } from 'bits-ui';
 
 	export let colour: Colour = colours[0];
 	export let initialColour: Colour | undefined = undefined;
 
 	let players = getPlayersStore();
-
-	function getAvailableColours(players: Player[]) {
-		const usedColours = new Set<string>();
-		players.forEach((p) => usedColours.add(p.colour));
-		return colours.filter((c) => !usedColours.has(c) || c === initialColour);
-	}
-	$: availableColours = getAvailableColours($players);
+	let availableColours = getAvailableColours($players, initialColour);
 </script>
 
 <RadioGroup.Root

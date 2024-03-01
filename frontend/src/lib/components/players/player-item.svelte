@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
 	import { Bot, Crown } from 'lucide-svelte';
-	import type { Player } from '.';
+	import type { Player } from '$lib/types/player';
 	import { fly } from 'svelte/transition';
 	import AddEditPlayer from './add-edit-player.svelte';
 
@@ -29,6 +29,6 @@
 		<span class="font-semibold">{player?.name}</span>
 	</div>
 	{#if isUser}
-		<AddEditPlayer {player} />
+		<AddEditPlayer />
 	{/if}
 </div>
