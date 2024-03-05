@@ -1,53 +1,46 @@
 import type { Player } from '$lib/types/player';
 import { getContext, setContext } from 'svelte';
-import { writable } from 'svelte/store';
-
-function createPlayersStore(initialPlayers: Player[]) {
-	const { subscribe, update } = writable<Player[]>(initialPlayers);
-
-	function addPlayer(player: Omit<Player, 'id'>) {
-		update((players) => {
-			const nextPlayerId = Math.max(...players.map((p) => p.id)) + 1;
-			const newPlayer = {
-				id: nextPlayerId,
-				...player
-			};
-
-			players.push(newPlayer);
-			return players;
-		});
-	}
-
-	function editPlayer(id: number, updatePlayer: Partial<Omit<Player, 'id'>>) {
-		update((players) => {
-			const i = players.findIndex((p) => p.id === id);
-			const updatedPlayer = {
-				...players[i],
-				...updatePlayer
-			} as Player;
-
-			players[i] = updatedPlayer;
-			return players;
-		});
-	}
-
-	return {
-		subscribe,
-		addPlayer,
-		editPlayer
-	};
-}
-
-type PlayersStore = ReturnType<typeof createPlayersStore>;
+import { derived, writable, type Readable, type Writable } from 'svelte/store';
+type PlayersStore = Writable<Player[]>;
 
 const PLAYERS_CTX = 'PLAYERS_CTX';
 
 export function setPlayersStore(initialPlayers: Player[]): PlayersStore {
-	const playersStore = createPlayersStore(initialPlayers);
-	setContext(PLAYERS_CTX, playersStore);
+	console.log('setting PlayersStore');
+	let playersStore = getPlayersStore();
+
+	if (playersStore === undefined) {
+		playersStore = writable(initialPlayers);
+		setContext(PLAYERS_CTX, playersStore);
+	} else {
+		playersStore.set(initialPlayers);
+	}
+
+	setUserStore(playersStore);
+
 	return playersStore;
 }
 
-export function getPlayersStore(): PlayersStore {
+export function getPlayersStore(): PlayersStore | undefined {
+	console.log('getting PlayersStore');
 	return getContext<PlayersStore>(PLAYERS_CTX);
+}
+
+type UserStore = Readable<Player | undefined>;
+
+const USER_CTX = 'USER_CTX';
+
+export function setUserStore(playersStore: PlayersStore): UserStore {
+	let userStore = getUserStore();
+	if (userStore === undefined) {
+		userStore = derived(playersStore, ($playersStore) => $playersStore.filter((p) => p.isUser)[0]);
+		setContext(USER_CTX, userStore);
+	}
+
+	return userStore;
+}
+
+export function getUserStore(): UserStore {
+	console.log('getting UserStore');
+	return getContext<Readable<Player | undefined>>(USER_CTX);
 }

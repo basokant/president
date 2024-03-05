@@ -29,6 +29,6 @@
 		<span class="font-semibold">{player?.name}</span>
 	</div>
 	{#if isUser}
-		<AddEditPlayer />
+		<AddEditPlayer bind:isEdit={isUser} />
 	{/if}
 </div>
